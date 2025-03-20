@@ -1,19 +1,20 @@
-﻿using LicenceGenAPI.Models;
+﻿using LicenceGenAPI.Data.VO;
+using LicenceGenAPI.Models;
 
 namespace LicenceGenAPI.Rules.Services
 {
     public interface ILicenceRuleService
     {
-        public LicenceModel Create(LicenceModel obj);
+        public LicenceVO Create(LicenceVO obj);
 
-        public LicenceModel Update(LicenceModel obj);
+        public LicenceVO Update(LicenceVO obj);
 
         public void Delete(int intId);
 
-        public List<LicenceModel> FindAll();
+        public List<LicenceVO> FindAll();
 
-        public LicenceModel FindById(int intId);
+        public LicenceVO FindById(int intId);
 
-        public LicenceModel FindByLicenceKey(string strLicenceKey);
+        public LicenceVO FindByLicenceKey(string strLicenceKey);
     }
 }

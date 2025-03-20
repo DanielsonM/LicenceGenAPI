@@ -1,8 +1,6 @@
-﻿using LicenceGenAPI.Controllers;
-using LicenceGenAPI.Data.Converter.Implementation;
+﻿using LicenceGenAPI.Data.Converter.Implementation;
 using LicenceGenAPI.Data.VO;
 using LicenceGenAPI.DbConnection;
-using LicenceGenAPI.Models;
 using LicenceGenAPI.Repository.Service;
 using LicenceGenAPI.Rules.Services;
 
@@ -19,9 +17,12 @@ namespace LicenceGenAPI.Rules.Implementation
             _converter = new LicenceConverter();
         }
 
-        public LicenceModel Create(LicenceModel objModel)
+        public LicenceVO Create(LicenceVO objModel)
         {
-            throw new NotImplementedException();
+            var objEntity = _converter.Parse(objModel);
+            objEntity = _repository.Create(objEntity);
+
+            return _converter.Parse(objEntity);
         }
 
         public void Delete(int intId)
@@ -29,24 +30,29 @@ namespace LicenceGenAPI.Rules.Implementation
             _repository.Delete(intId);
         }
 
-        public List<LicenceModel> FindAll()
+        public List<LicenceVO> FindAll()
         {
-            return _repository.FindAll();
+            return _converter.Parse(_repository.FindAll());
         }
 
-        public LicenceModel FindById(int intId)
+        public LicenceVO FindById(int intId)
         {
-           return _repository.FindById(intId);
+            var objEntity = _converter.Parse(_repository.FindById(intId));
+           return _converter.Parse(_converter.Parse(objEntity));
         }
 
-        public LicenceModel FindByLicenceKey(string strLicenceKey)
+        public LicenceVO FindByLicenceKey(string strLicenceKey)
         {
-            return _repository.FindByLicenceKey(strLicenceKey);
+            var objEntity = _converter.Parse(_repository.FindByLicenceKey(strLicenceKey));
+            return _converter.Parse(_converter.Parse(objEntity));
         }
 
-        public LicenceModel Update(LicenceModel objModel)
+        public LicenceVO Update(LicenceVO objModel)
         {
-            return _repository.Update(objModel);
+            var objEntity = _converter.Parse(objModel);
+            objEntity = _repository.Update(objEntity);
+
+            return _converter.Parse(objEntity);
         }
     }
 }

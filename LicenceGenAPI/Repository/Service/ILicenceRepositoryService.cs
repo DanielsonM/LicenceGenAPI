@@ -1,4 +1,5 @@
-﻿using LicenceGenAPI.Models;
+﻿using LicenceGenAPI.Data.VO;
+using LicenceGenAPI.Models;
 
 namespace LicenceGenAPI.Repository.Service
 {

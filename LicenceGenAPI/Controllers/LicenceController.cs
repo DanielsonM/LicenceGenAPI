@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using LicenceGenAPI.Data.VO;
 using LicenceGenAPI.DbConnection;
 using LicenceGenAPI.Models;
 using LicenceGenAPI.Rules.Services;
@@ -7,9 +8,9 @@ using Microsoft.AspNetCore.Rewrite;
 
 namespace LicenceGenAPI.Controllers
 {
-    
+    [ApiVersion("1")]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/v{version:apiVersion}")]
     public class LicenceController : ControllerBase
     {
         private readonly ILogger<LicenceController> _logger;
@@ -21,7 +22,7 @@ namespace LicenceGenAPI.Controllers
             _ruleService = ruleService;
         }
 
-        [HttpGet("all")]
+        [HttpGet()]
         public IActionResult Get()
         {
             return Ok(_ruleService.FindAll());
@@ -39,7 +40,7 @@ namespace LicenceGenAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] LicenceModel objModel)
+        public IActionResult Post([FromBody] LicenceVO objModel)
         {
             var objFound = _ruleService.Create(objModel);
 
@@ -50,7 +51,7 @@ namespace LicenceGenAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] LicenceModel objModel)
+        public IActionResult Put([FromBody] LicenceVO objModel)
         {
             var objFound = _ruleService.Update(objModel);
 
