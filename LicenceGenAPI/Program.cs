@@ -10,10 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddCors(options => 
+options.AddDefaultPolicy(builder => 
+builder.AllowAnyOrigin()
+.AllowAnyMethod()
+.AllowAnyHeader())); 
+
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 
 
@@ -36,11 +42,16 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
 }
 
+app.UseCors();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "LicenceGenAPI v1");
+    });
 }
 
 app.UseHttpsRedirection();
