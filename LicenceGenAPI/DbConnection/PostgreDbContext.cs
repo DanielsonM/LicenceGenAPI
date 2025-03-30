@@ -16,5 +16,6 @@ namespace LicenceGenAPI.DbConnection
         }
 
         public DbSet<LicenceModel> Licence { get; set; }
+        public DbSet<UserModel> Users { get; set; }
     }
 }
