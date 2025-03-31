@@ -122,11 +122,20 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 // Configuração do pipeline de middleware
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseSwagger();
-app.UseSwaggerUI();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "LicenceGenAPI v1");
+    });
+}
 
 var option = new RewriteOptions();
 option.AddRedirect("^$", "swagger");
