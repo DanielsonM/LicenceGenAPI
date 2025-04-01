@@ -3,7 +3,6 @@ using LicenceGenAPI.Data.VO;
 using LicenceGenAPI.DbConnection;
 using LicenceGenAPI.Models;
 using LicenceGenAPI.Rules.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 
@@ -12,7 +11,6 @@ namespace LicenceGenAPI.Controllers
     [ApiVersion("1")]
     [ApiController]
     [Route("api/[controller]/v{version:apiVersion}")]
-    [Authorize]
     public class LicenceController : ControllerBase
     {
         private readonly ILogger<LicenceController> _logger;

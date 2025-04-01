@@ -9,6 +9,7 @@ namespace LicenceGenAPI.Data.VO
     {
         public int intId { get; set; }
 
+        [JsonPropertyName("")]
         public string strUserName { get; set; } = string.Empty;
 
         [JsonIgnore]
