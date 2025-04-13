@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LicenceGenAPI.Models
 {
     [Table("users")]
     public class UserModel
     {
+        [Key]
         [Column("int_id")]
         public int intId { get; set; }
 
@@ -14,13 +16,13 @@ namespace LicenceGenAPI.Models
         [Column("str_full_name")]
         public string strFullName { get; set; } = string.Empty;
 
-        [Column("strPassword")]
+        [Column("str_password")]
         public string strPassword { get; set; } = string.Empty;
 
         [Column("str_refresh_token")]
         public string strRefreshToken { get; set; } = string.Empty;
 
         [Column("str_refresh_token_expire_time")]
-        public string strRefreshTokenExpiryTime { get; set; } = string.Empty;
+        public DateTime dttRefreshTokenExpiryTime { get; set; }
     }
 }
