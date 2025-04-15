@@ -38,9 +38,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "ConfigIssuer",
-        ValidAudience = "ConfigIssuer",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MY_NEWEST_SUPER_SUPER_SECRET_KEY_1234567890"))
+        ValidIssuer = tokenConfiguration.Issuer,
+        ValidAudience = tokenConfiguration.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfiguration.Secret))
     };
 });
 
@@ -115,6 +115,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<PostgreDbContext>();
     context.Database.Migrate();
+
 }
 
 app.UseCors();

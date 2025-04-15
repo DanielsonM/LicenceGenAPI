@@ -45,18 +45,16 @@ namespace LicenceGenAPI.Repository.User
         public UserModel? ValidateCredentials(UserVO objUserVO)
         {
             var user = _context.Users.FirstOrDefault(u => u.strUserName == objUserVO.strUserName);
-            var passWordDb = _context.Users.Select(pass => pass.strPassword);
 
             if (user != null)
             {
                 using (var sha256 = SHA256.Create())
                 {
-                    object? passWord = passWordDb;
+                        var passWord = this.ComputeHash(objUserVO.strPassword, sha256);
 
-                    if (passWord == null)
-                        passWord = this.ComputeHash(objUserVO.strPassword, sha256);
+                    var result = _context.Users.FirstOrDefault(user => user.strUserName.Equals(objUserVO.strUserName) && user.strPassword.Equals(passWord));
 
-                    return _context.Users.FirstOrDefault(user => user.strUserName.Equals(objUserVO.strUserName) && user.strPassword.Equals(objUserVO.strPassword));
+                    return result;
                 }
             }
 
