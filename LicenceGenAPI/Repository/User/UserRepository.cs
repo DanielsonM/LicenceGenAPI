@@ -61,6 +61,14 @@ namespace LicenceGenAPI.Repository.User
             return null;
         }
 
+        public UserModel? ValidateCredentials(string strUserName)
+        {
+
+            var objUser = _context.Users.SingleOrDefault(user => user.strUserName.Equals(strUserName));
+
+            return objUser;
+        }
+
         private object ComputeHash(string strPassword, SHA256 sha256)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes(strPassword);

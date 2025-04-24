@@ -48,7 +48,49 @@ namespace LicenceGenAPI.Rules
             DateTime expirationDate = createDate.AddMinutes(_tokenConfiguration.Minutes);
 
 
-            return new TokenVO(true, createDate.ToString(DATE_FORMAT), expirationDate.ToString(DATE_FORMAT), accessToken,refreshToken);
+            return new TokenVO(
+                                 true,
+                                 createDate.ToString(DATE_FORMAT),
+                                 expirationDate.ToString(DATE_FORMAT),
+                                 accessToken,
+                                 refreshToken);
+        }
+
+        public TokenVO? ValidateCredentials(TokenVO? objTokenVO)
+        {
+            var accessToken = objTokenVO?.AccessToken;
+            var refreshToken = objTokenVO?.RefreshToken;
+
+            var objPrincipal = _token.GetPrincipalExpiredToken(accessToken);
+
+            var usermane = objPrincipal?.Identity?.Name;
+
+            var objUser = _userRepository.ValidateCredentials(usermane);
+
+            if(objUser == null || objUser.strRefreshToken != refreshToken || 
+               objUser.dttRefreshTokenExpiryTime <= DateTime.UtcNow)
+            {
+                return null;
+            }
+
+            accessToken = _token.GenerateAcessToken(objPrincipal?.Claims);
+            refreshToken = _token.GenerateRefreshToken();
+
+            objUser.strRefreshToken = refreshToken;
+
+            _userRepository.RefreshUserInfo(objUser);
+
+            DateTime createDate = DateTime.Now;
+            DateTime expirationDate = createDate.AddMinutes(_tokenConfiguration.Minutes);
+
+
+            return new TokenVO(
+                                true, 
+                                createDate.ToString(DATE_FORMAT), 
+                                expirationDate.ToString(DATE_FORMAT), 
+                                accessToken, 
+                                refreshToken);
+
         }
     }
 }

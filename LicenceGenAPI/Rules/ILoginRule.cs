@@ -5,6 +5,8 @@ namespace LicenceGenAPI.Rules
 {
     public interface ILoginRule
     {
-        TokenVO ValidateCredentials(UserVO objUserVO);
+        TokenVO? ValidateCredentials(UserVO? objUserVO);
+
+        TokenVO? ValidateCredentials(TokenVO? objTokenVO);
     }
 }

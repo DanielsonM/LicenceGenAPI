@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using LicenceGenAPI.Data.VO;
 using LicenceGenAPI.Models;
 using LicenceGenAPI.Rules;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,17 @@ namespace LicenceGenAPI.Controllers
 
             if(token == null) return Unauthorized();
 
+            return Ok(token);
+        }
+
+        [HttpPost]
+        [Route("Refresh")]
+        public IActionResult Refresh([FromBody] TokenVO objTokenVO)
+        {
+            if (objTokenVO == null) return BadRequest("Ivalid client request");
+            var token = _loginRule.ValidateCredentials(objTokenVO);
+
+            if (token == null) return BadRequest("Ivalid client request"); 
 
             return Ok(token);
         }

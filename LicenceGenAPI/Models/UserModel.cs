@@ -20,7 +20,7 @@ namespace LicenceGenAPI.Models
         public string strPassword { get; set; } = string.Empty;
 
         [Column("str_refresh_token")]
-        public string strRefreshToken { get; set; } = string.Empty;
+        public string? strRefreshToken { get; set; } = string.Empty;
 
         [Column("dtt_refresh_token_expire_time")]
         public DateTime dttRefreshTokenExpiryTime { get; set; }
