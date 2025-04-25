@@ -16,7 +16,7 @@ namespace LicenceGenAPI.Services.Implementations
             _configuration = configuration;
         }
 
-        public string GenerateAcessToken(IEnumerable<Claim> objClaims)
+        public string GenerateAcessToken(IEnumerable<Claim>? objClaims)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Secret));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);

@@ -42,26 +42,31 @@ namespace LicenceGenAPI.Repository.User
 
         }
 
-        public UserModel? ValidateCredentials(UserVO objUserVO)
+        public bool RevokeToken(string? strUserName)
         {
-            var user = _context.Users.FirstOrDefault(u => u.strUserName == objUserVO.strUserName);
+            if (string.IsNullOrWhiteSpace(strUserName)) return false;
 
-            if (user != null)
+            var objUser = _context.Users.FirstOrDefault(user =>
+                user.strUserName.ToLower() == strUserName.ToLower());
+
+            if (objUser == null) return false;
+
+            objUser.strRefreshToken = null;
+
+            try
             {
-                using (var sha256 = SHA256.Create())
-                {
-                        var passWord = this.ComputeHash(objUserVO.strPassword, sha256);
-
-                    var result = _context.Users.FirstOrDefault(user => user.strUserName.Equals(objUserVO.strUserName) && user.strPassword.Equals(passWord));
-
-                    return result;
-                }
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                // Log o erro ou trate conforme necessário
+                return false;
             }
 
-            return null;
+            return true;
         }
 
-        public UserModel? ValidateCredentials(string strUserName)
+        public UserModel? ValidateCredentials(string? strUserName)
         {
 
             var objUser = _context.Users.SingleOrDefault(user => user.strUserName.Equals(strUserName));
@@ -69,12 +74,32 @@ namespace LicenceGenAPI.Repository.User
             return objUser;
         }
 
-        private object ComputeHash(string strPassword, SHA256 sha256)
-        {
-            byte[] inputBytes = Encoding.UTF8.GetBytes(strPassword);
-            byte[] hashedBytes = sha256.ComputeHash(inputBytes);
 
-            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+        public UserModel? ValidateCredentials(UserVO? objUserVO)
+        {
+            if (objUserVO == null || string.IsNullOrWhiteSpace(objUserVO.strPassword) || string.IsNullOrWhiteSpace(objUserVO.strUserName))
+            {
+                return null;
+            }
+
+            string hashedPassword = ComputeHash(objUserVO.strPassword);
+
+            var result = _context.Users.FirstOrDefault(user =>
+                         user.strUserName.ToLower() == objUserVO.strUserName.ToLower() &&
+                         user.strPassword == hashedPassword);
+
+            return result;
+        }
+
+        private string ComputeHash(string strPassword)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(strPassword);
+                byte[] hashedBytes = sha256.ComputeHash(inputBytes);
+
+                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            }
         }
     }
 }

@@ -8,5 +8,7 @@ namespace LicenceGenAPI.Rules
         TokenVO? ValidateCredentials(UserVO? objUserVO);
 
         TokenVO? ValidateCredentials(TokenVO? objTokenVO);
+
+        public bool RevokeToken(string? strUserName);
     }
 }

@@ -22,7 +22,7 @@ namespace LicenceGenAPI.Rules
             _token = token;
         }
 
-        public TokenVO ValidateCredentials(UserVO objUserVO)
+        public TokenVO? ValidateCredentials(UserVO? objUserVO)
         {
 
             var user = _userRepository.ValidateCredentials(objUserVO);
@@ -91,6 +91,11 @@ namespace LicenceGenAPI.Rules
                                 accessToken, 
                                 refreshToken);
 
+        }
+
+        public bool RevokeToken(string? strUserName)
+        {
+            return _userRepository.RevokeToken(strUserName);
         }
     }
 }

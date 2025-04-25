@@ -8,6 +8,8 @@ namespace LicenceGenAPI.Repository.User
 
         UserModel? ValidateCredentials(string? strUserName);
 
+        public bool RevokeToken(string? strUserName);
+
         UserModel? RefreshUserInfo(UserModel objUser);
     }
 }

@@ -2,6 +2,7 @@
 using LicenceGenAPI.Data.VO;
 using LicenceGenAPI.Models;
 using LicenceGenAPI.Rules;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LicenceGenAPI.Controllers
@@ -26,7 +27,7 @@ namespace LicenceGenAPI.Controllers
             if (objUserVO == null) return BadRequest("Ivalid client request");
             var token = _loginRule.ValidateCredentials(objUserVO);
 
-            if(token == null) return Unauthorized();
+            if (token == null) return Unauthorized();
 
             return Ok(token);
         }
@@ -38,9 +39,23 @@ namespace LicenceGenAPI.Controllers
             if (objTokenVO == null) return BadRequest("Ivalid client request");
             var token = _loginRule.ValidateCredentials(objTokenVO);
 
-            if (token == null) return BadRequest("Ivalid client request"); 
+            if (token == null) return BadRequest("Ivalid client request");
 
             return Ok(token);
+        }
+
+        [HttpGet]
+        [Route("Revoke")]
+        [Authorize]
+        public IActionResult Revoke()
+        {
+            string? objUserName = User?.Identity?.Name;
+
+            bool result = _loginRule.RevokeToken(objUserName);
+
+            if (!result) return BadRequest("Ivalid client request");
+
+            return NoContent();
         }
     }
 }
